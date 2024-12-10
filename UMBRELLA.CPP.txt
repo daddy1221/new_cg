@@ -1,0 +1,76 @@
+#include <iostream.h>
+#include <conio.h>
+#include <graphics.h>
+#include <stdlib.h>
+#include <dos.h>
+
+class walkingman {
+    int rhx, rhy;  // Random max screen coordinates
+
+public:
+    void draw(int);        // Draw walking man
+    void draw(int, int);   // Draw rain
+};
+
+// Function to draw the walking man
+void walkingman::draw(int i) {
+    line(20, 380, 580, 380);  // Ground line
+
+    // Alternating leg movement for walking effect
+    if (i % 2) {  // If i is odd
+        line(25 + i, 380, 35 + i, 340);  // Left leg
+        line(45 + i, 380, 35 + i, 340);  // Right leg
+        line(35 + i, 310, 25 + i, 330);  // Arm
+        delay(20);
+    } else {  // If i is even
+        line(35 + i, 340, 35 + i, 310);  // Standing leg
+        line(35 + i, 310, 40 + i, 330);  // Arm
+        delay(20);
+    }
+
+    // Common parts of the body
+    line(35 + i, 340, 35 + i, 310);  // Body line
+    circle(35 + i, 300, 10);         // Head
+    line(35 + i, 310, 50 + i, 330);  // Right arm
+    line(50 + i, 330, 50 + i, 280);  // Umbrella handle
+
+    // Draw umbrella
+    line(15 + i, 280, 85 + i, 280);  // Umbrella bottom line
+    arc(50 + i, 280, 0, 180, 35);   // Umbrella top curve
+    arc(55 + i, 330, 180, 360, 5);  // Small arc near the handle
+}
+
+// Function to draw rain
+void walkingman::draw(int x, int y) {
+    int j;
+    rhx = x;
+    rhy = y;
+
+    for (j = 0; j < 100; j++) {
+        outtextxy(rand() % rhx, rand() % (rhy - 50), "|");  // Random rain drops
+        setcolor(WHITE);
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;  // Graphics mode detection
+    int rhx, rhy, j, i;
+    walkingman obj;
+
+    // Initialize graphics
+    initgraph(&gd, &gm, "C:\\TURBOC3\\BGI");
+
+    for (i = 0; i < 500; i++) {
+        obj.draw(i);           // Draw walking man
+        rhx = getmaxx();       // Get screen width
+        rhy = getmaxy();       // Get screen height
+        obj.draw(rhx, rhy);    // Draw rain
+
+        delay(150);            // Slow down the motion
+        cleardevice();         // Clear screen for next frame
+    }
+
+    getch();
+    closegraph();
+    return 0;
+}

@@ -1,0 +1,46 @@
+#include <graphics.h>
+#include <conio.h>
+#include <math.h>
+#define PI 3.14159
+#include<iostream.h>
+
+void rotate(float x[], float y[], float angle) {
+    float rad = angle * PI / 180;
+    float tempX, tempY;
+
+    for (int i = 0; i < 3; i++) {
+        tempX = x[i] * cos(rad) - y[i] * sin(rad);
+        tempY = x[i] * sin(rad) + y[i] * cos(rad);
+        x[i] = tempX;
+        y[i] = tempY;
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "C:\\TURBOC3\\BGI");
+
+    float x[] = {200, 250, 225};
+    float y[] = {200, 200, 150};
+    int angle;
+
+    // Original triangle
+    line(x[0], y[0], x[1], y[1]);
+    line(x[1], y[1], x[2], y[2]);
+    line(x[2], y[2], x[0], y[0]);
+
+    cout << "Enter the rotation angle: ";
+    cin >> angle;
+
+    rotate(x, y, angle);
+
+    // Rotated triangle
+    setcolor(RED);
+    line(x[0], y[0], x[1], y[1]);
+    line(x[1], y[1], x[2], y[2]);
+    line(x[2], y[2], x[0], y[0]);
+
+    getch();
+    closegraph();
+    return 0;
+}

@@ -1,0 +1,61 @@
+#include <iostream.h>
+#include <math.h>
+#include <graphics.h>
+#include <conio.h>
+#include<dos.h>
+
+class kochCurve {
+public:
+    // Function to draw the Koch Curve recursively
+    void koch(int it, int x1, int y1, int x5, int y5) {
+	int x2, y2, x3, y3, x4, y4;
+	int dx, dy;
+
+	if (it == 0) {
+	    line(x1, y1, x5, y5);  // Base case: draw straight line
+	} else {
+	    delay(10);  // Small delay for visualization
+
+            dx = (x5 - x1) / 3;  // Divide the line into thirds
+            dy = (y5 - y1) / 3;
+
+            x2 = x1 + dx;        // First division point
+            y2 = y1 + dy;
+
+            // Calculate the peak of the triangle using rotation formula
+            x3 = (int)(0.5 * (x1 + x5) + sqrt(3) * (y1 - y5) / 6);
+            y3 = (int)(0.5 * (y1 + y5) + sqrt(3) * (x5 - x1) / 6);
+
+            x4 = 2 * dx + x1;    // Second division point
+            y4 = 2 * dy + y1;
+
+            // Recursively draw the four line segments
+            koch(it - 1, x1, y1, x2, y2);  // Left segment
+            koch(it - 1, x2, y2, x3, y3);  // Left upward segment
+            koch(it - 1, x3, y3, x4, y4);  // Right upward segment
+            koch(it - 1, x4, y4, x5, y5);  // Right segment
+        }
+    }
+};
+
+int main() {
+    kochCurve k;  // Create object of the class
+    int it;       // Number of iterations
+
+    // Input number of iterations
+    cout << "Enter Number Of Iterations: " << endl;
+    cin >> it;
+
+    // Initialize graphics mode
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "C:\\TURBOC3\\BGI");
+
+    // Draw an upward-facing Koch Snowflake (triangle)
+    k.koch(it, 150, 20, 20, 280);   // Left side
+    k.koch(it, 280, 280, 150, 20);  // Right side
+    k.koch(it, 20, 280, 280, 280);  // Bottom side
+
+    getch();       // Wait for a key press
+    closegraph();  // Close the graphics mode
+    return 0;
+}
